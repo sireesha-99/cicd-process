@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0e152f61-5b17-4211-bd77-cfe6d26c516f" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="cicd-processFlow" doc:id="d8108d33-406a-41d2-8ecc-9d876d8f9ecd" >
+		<http:listener doc:name="Listener" doc:id="5fef6a6c-08c4-4a8d-8e34-6c434b78d600" config-ref="HTTP_Listener_config" path="/cicd"/>
+		<logger level="INFO" doc:name="Logger" doc:id="76b40b62-bbd0-45b5-a597-240601c82855" message="request to account info"/>
+		<ee:transform doc:name="Transform Message" doc:id="4aefa02c-e85f-41d0-a651-3a6e72f8de29" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"accountId": "11559944",
+	"account name": "siri",
+	"create date": now() as String
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="309b01a6-a459-40af-90db-61e87dce7be4" message="request==info"/>
+	</flow>
+</mule>
